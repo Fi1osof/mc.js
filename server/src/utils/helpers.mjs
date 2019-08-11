@@ -2,7 +2,17 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 class Helpers {
-  static hashPassword = password => {
+
+  constructor() {
+
+    this.hashPassword = this.hashPassword.bind(this);
+    this.getUserId = this.getUserId.bind(this);
+    this.getBlockRep = this.getBlockRep.bind(this);
+    this.generateToken = this.generateToken.bind(this);
+
+  }
+
+  static hashPassword(password) {
     if (password.length < 8) {
       throw new Error('Password must be 8 characters or longer.')
     }
@@ -10,7 +20,7 @@ class Helpers {
     return bcrypt.hash(password, 10)
   }
 
-  static getUserId = (request, requireAuth = true) => {
+  static getUserId(request, requireAuth = true) {
     const header = request.request
       ? request.request.headers.authorization
       : request.connection.context.Authorization
@@ -28,9 +38,11 @@ class Helpers {
     return null
   }
 
-  static getBlockRep = (worldId, x, y, z) => `${worldId}:${x}:${y}:${z}`
+  static getBlockRep(worldId, x, y, z) {
+    return `${worldId}:${x}:${y}:${z}`
+  }
 
-  static generateToken = userId => {
+  static generateToken(userId) {
     return jwt.sign({ userId }, 'thisisasecret', { expiresIn: '7 days' })
   }
 }
