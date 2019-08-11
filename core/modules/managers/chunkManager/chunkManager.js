@@ -68,7 +68,7 @@ class ChunkManager {
     let count = 0
     let allGood = true
 
-    const RENDER_D = this.world.data.user.settings.renderDistance
+    const RENDER_D = (this.world.data.user.settings || {}).renderDistance || 2
 
     for (let x = coordx - RENDER_D; x <= coordx + RENDER_D; x++) {
       for (let z = coordz - RENDER_D; z <= coordz + RENDER_D; z++) {
