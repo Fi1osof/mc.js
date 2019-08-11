@@ -6,27 +6,37 @@ const PlayerMutations = {
     {
       data: { worldId, gamemode }
     },
-    { prisma, request }
+    ctx
   ) {
-    const id = Helpers.getUserId(request)
 
-    const userExists = await prisma.exists.User({ id })
-    if (!userExists) throw new Error('User not found')
+    const { db, request } = ctx;
 
-    const existingPlayer = await prisma.exists.Player({
-      user: {
-        id
+    const id = Helpers.getUserId(request, true, ctx)
+
+    // const userExists = await db.exists.User({ id })
+    // if (!userExists) throw new Error('User not found')
+
+    const players = await db.query.players({
+      first: 1,
+      where: {
+        user: {
+          id
+        },
+        world: {
+          id: worldId
+        },
       },
-      world: {
-        id: worldId
-      }
     })
 
-    console.log(existingPlayer)
+    let player;
 
     // Player creation
-    if (!existingPlayer)
-      await prisma.mutation.createPlayer({
+    if (players && players[0]) {
+      player = players[0];
+    }
+    else {
+
+      player = await db.mutation.createPlayer({
         data: {
           isAdmin: true,
           gamemode,
@@ -54,36 +64,45 @@ const PlayerMutations = {
           }
         }
       })
+    }
 
-    return true
+    return player;
   },
-  async updatePlayer(parent, args, { prisma }, info) {
-    const playerId = args.data.id
-    delete args.data.id
+  async updatePlayer(parent, args, { db }, info) {
+    let { where } = args
 
-    const { cursor } = args.data
-    delete args.data.cursor
+    const { id, cursor, data, ...otherData } = args.data || {}
 
-    const { data } = args.data
-    delete args.data.data
+    if (!where && id) {
+      where = {
+        id
+      }
+    }
+
+    // const playerId = args.data.id
+    // delete args.data.id
+
+    // const { cursor } = args.data
+    // delete args.data.cursor
+
+    // const { data } = args.data
+    // delete args.data.data
 
     const inventoryUpdate = { inventory: { update: { cursor, data } } }
     if (!cursor) delete inventoryUpdate.cursor
     if (!data) delete inventoryUpdate.data
 
-    return prisma.mutation.updatePlayer(
+    return db.mutation.updatePlayer(
       {
-        where: {
-          id: playerId
-        },
+        where,
         data: {
-          ...args.data,
+          ...otherData,
           ...inventoryUpdate
         }
       },
       info
     )
-  }
+  },
 }
 
 export default PlayerMutations
