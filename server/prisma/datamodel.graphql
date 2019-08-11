@@ -1,16 +1,16 @@
 type User {
-  id: ID! @id
-  username: String! @unique
-  email: String! @unique
-  password: String!
-  settings: Settings!
+  id: ID! @unique
+  username: String @unique
+  email: String @unique
+  password: String
+  settings: Settings
   worlds: [World!]!
   updatedAt: DateTime! @updatedAt
   createdAt: DateTime! @createdAt
 }
 
 type Message {
-  id: ID! @id
+  id: ID! @unique
   world: World! @relation(name: "MessagesToWorld", onDelete: SET_NULL)
   type: MessageType!
   sender: String
@@ -18,7 +18,7 @@ type Message {
 }
 
 type Player {
-  id: ID! @id
+  id: ID! @unique
   isAdmin: Boolean!
   gamemode: Gamemode!
   user: User!
@@ -34,12 +34,12 @@ type Player {
 }
 
 type Settings {
-  id: ID! @id
+  id: ID! @unique
   renderDistance: Int! @default(value: 2)
 }
 
 type World {
-  id: ID! @id
+  id: ID! @unique
   name: String!
   seed: String!
   type: WorldType!
@@ -53,7 +53,7 @@ type World {
 }
 
 type Block {
-  id: ID! @id
+  id: ID! @unique
   representation: String! @unique
   type: Int!
   world: World! @relation(name: "BlocksToWorld", onDelete: SET_NULL)
@@ -65,7 +65,7 @@ type Block {
 # Inventory is essentailly a ndarray 4 * 9 of items
 # cursor is what the player is holding (1 - 9)
 type Inventory {
-  id: ID! @id
+  id: ID! @unique
   player: Player! @relation(name: "InventoryToPlayer", onDelete: CASCADE)
   cursor: Int!
   data: String!
