@@ -76,19 +76,16 @@ const UserMutations = {
   updateSettings(
     parent,
     {
-      data: { id, ...settings }
+      data: { id, ...data },
+      where
     },
     { db },
     info
   ) {
     return db.mutation.updateSettings(
       {
-        data: {
-          ...settings
-        },
-        where: {
-          id
-        }
+        data,
+        where
       },
       info
     )

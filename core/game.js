@@ -35,7 +35,10 @@ class Game {
     const { world } = data
 
     const playerData = world.players.find(ele => ele.user.username === username)
-    const RENDER_D = playerData.user.settings.renderDistance
+
+    console.log('playerData', playerData)
+
+    const { renderDistance: RENDER_D = 2 } = playerData.user.settings || {}
 
     /** LOCAL DATA SAVE */
     this.data = {
