@@ -19,16 +19,21 @@ import URI from 'urijs'
 
 dotenv.config()
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000',
-  credentials: 'same-origin'
-})
-
 const {
   location: { origin }
 } = global
 
 const endpoint = `${origin}/api/`
+
+const httpLink = createHttpLink({
+  uri: endpoint,
+  credentials: 'same-origin'
+})
+
+// const httpLink = createHttpLink({
+//   uri: 'http://localhost:4000',
+//   credentials: 'same-origin'
+// })
 
 const wsUri = new URI(endpoint)
 
