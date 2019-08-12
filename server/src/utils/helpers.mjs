@@ -20,22 +20,40 @@ class Helpers {
     return bcrypt.hash(password, 10)
   }
 
-  static getUserId(request, requireAuth = true) {
-    const header = request.request
-      ? request.request.headers.authorization
-      : request.connection.context.Authorization
+  static getUserId(request, requireAuth = true, ctx) {
 
-    if (header) {
-      const token = header.replace('Bearer ', '')
-      const decoded = jwt.verify(token, 'thisisasecret')
-      return decoded.userId
+    if (!ctx) {
+      throw new Error("ctx required");
     }
 
-    if (requireAuth) {
-      throw new Error('Authentication required')
+    // const header = request.request
+    //   ? request.request.headers.authorization
+    //   : request.connection.context.Authorization
+
+    // if (header) {
+    //   const token = header.replace('Bearer ', '')
+    //   const decoded = jwt.verify(token, 'thisisasecret')
+    //   return decoded.userId
+    // }
+
+    // if (requireAuth) {
+    //   throw new Error('Authentication required')
+    // }
+
+
+    const {
+      currentUser,
+    } = ctx;
+
+    const {
+      id: currentUserId,
+    } = currentUser;
+
+    if (!currentUserId && requireAuth) {
+      throw new Error('Authentication required');
     }
 
-    return null
+    return currentUserId;
   }
 
   static getBlockRep(worldId, x, y, z) {

@@ -3,8 +3,8 @@ const defaultArray = []
 
 const WorldSubscriptions = {
   message: {
-    subscribe(parent, { worldId }, { prisma }, info) {
-      return prisma.subscription.message(
+    subscribe(parent, { worldId }, { db }, info) {
+      return db.subscription.message(
         {
           where: {
             node: {
@@ -22,10 +22,10 @@ const WorldSubscriptions = {
     subscribe(
       parent,
       { worldId, mutation_in, updatedFields_contains_some },
-      { prisma },
+      { db },
       info
     ) {
-      return prisma.subscription.world(
+      return db.subscription.world(
         {
           where: {
             updatedFields_contains_some:

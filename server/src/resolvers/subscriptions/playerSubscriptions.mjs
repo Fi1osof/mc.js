@@ -6,10 +6,10 @@ const PlayerSubscriptions = {
     subscribe(
       parent,
       { username, worldId, mutation_in, updatedFields_contains_some },
-      { prisma },
+      { db },
       info
     ) {
-      return prisma.subscription.player(
+      return db.subscription.player(
         {
           where: {
             updatedFields_contains_some:

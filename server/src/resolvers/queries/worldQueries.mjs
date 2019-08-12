@@ -1,29 +1,25 @@
 import Helpers from '../../utils/helpers'
 
 const WorldQueries = {
-  myWorlds(parent, args, { prisma, request }, info) {
+  myWorlds(parent, args, { db, request }, info) {
     const userId = Helpers.getUserId(request)
-    return prisma.query.user({ where: { id: userId } }, info)
+    return db.query.user({ where: { id: userId } }, info)
   },
-  async world(parent, args, { prisma }, info) {
-    // const id = args.query
+  async world(parent, args, { db }, info) {
 
-    const { query } = args
-    let { where } = args
+    let {
+      data,
+      where,
+    } = args;
 
-    if (!where && query) {
-      where = {
-        id: query
-      }
-    }
-
-    await prisma.mutation.updateWorld({
+    await db.mutation.updateWorld({
       data: {
+        ...data,
         lastPlayed: new Date().toISOString()
       },
-      where
+      where,
     })
-    return prisma.query.world({ where }, info)
+    return db.query.world({ where }, info)
   }
 }
 

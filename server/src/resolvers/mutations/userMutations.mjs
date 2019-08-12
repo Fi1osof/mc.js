@@ -3,10 +3,9 @@ import Helpers from '../../utils/helpers'
 import bcrypt from 'bcryptjs'
 
 const UserMutations = {
-  // async createUser(parent, args, { prisma }) {
-  async signup(parent, args, { prisma }) {
+  async createUser(parent, args, { db }) {
     const password = await Helpers.hashPassword(args.data.password)
-    const user = await prisma.mutation.createUser({
+    const user = await db.mutation.createUser({
       data: {
         ...args.data,
         password,
@@ -23,8 +22,8 @@ const UserMutations = {
       token: Helpers.generateToken(user.id)
     }
   },
-  async login(parent, args, { prisma }) {
-    const user = await prisma.query.user({
+  async login(parent, args, { db }) {
+    const user = await db.query.user({
       where: {
         email: args.data.email
       }
@@ -45,10 +44,10 @@ const UserMutations = {
       token: Helpers.generateToken(user.id)
     }
   },
-  async deleteUser(parent, args, { prisma, request }, info) {
+  async deleteUser(parent, args, { db, request }, info) {
     const userId = Helpers.getUserId(request)
 
-    return prisma.mutation.deleteUser(
+    return db.mutation.deleteUser(
       {
         where: {
           id: userId
@@ -57,14 +56,14 @@ const UserMutations = {
       info
     )
   },
-  async updateUser(parent, args, { prisma, request }, info) {
+  async updateUser(parent, args, { db, request }, info) {
     const userId = Helpers.getUserId(request)
 
     if (typeof args.data.password === 'string') {
       args.data.password = await Helpers.hashPassword(args.data.password)
     }
 
-    return prisma.mutation.updateUser(
+    return db.mutation.updateUser(
       {
         where: {
           id: userId
@@ -80,16 +79,10 @@ const UserMutations = {
       data: { id, ...data },
       where
     },
-    { prisma },
+    { db },
     info
   ) {
-    if (!where && id) {
-      where = {
-        id
-      }
-    }
-
-    return prisma.mutation.updateSettings(
+    return db.mutation.updateSettings(
       {
         data,
         where
