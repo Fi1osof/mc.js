@@ -15,6 +15,7 @@ import { setContext } from 'apollo-link-context'
 import { split } from 'apollo-link'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import URI from 'urijs'
 
 dotenv.config()
 
@@ -23,13 +24,37 @@ const httpLink = createHttpLink({
   credentials: 'same-origin'
 })
 
+const {
+  location: { origin }
+} = global
+
+const endpoint = `${origin}/api/`
+
+const wsUri = new URI(endpoint)
+
+let schema = wsUri.scheme()
+
+switch (schema) {
+  case 'http':
+    schema = 'ws'
+    break
+
+  case 'https':
+  default:
+    schema = 'wss'
+    break
+}
+
+wsUri.scheme(schema)
+
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
   new WebSocketLink({
-    uri: 'ws://localhost:4000',
+    // uri: 'ws://localhost:4000',
+    uri: wsUri.toString(),
     options: {
       reconnect: true
     }

@@ -32,6 +32,14 @@ export const UPDATE_SETTINGS_MUTATION = gql`
   }
 `
 
+export const CREATE_SETTINGS_MUTATION = gql`
+  mutation CreateSettings($renderDistance: Int) {
+    createSettings(data: { renderDistance: $renderDistance }) {
+      renderDistance
+    }
+  }
+`
+
 export const CREATE_WORLD_MUTATION = gql`
   mutation CreateWorld($data: WorldCreateInput!) {
     createWorld(data: $data) {
