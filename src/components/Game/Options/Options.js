@@ -1,6 +1,10 @@
 import sharedStyles from '../../../containers/sharedStyles.module.css'
 import { Slider, Hint } from '../../Utils'
-import { MY_SETTINGS, UPDATE_SETTINGS_MUTATION } from '../../../lib/graphql'
+import {
+  MY_SETTINGS,
+  UPDATE_SETTINGS_MUTATION,
+  CREATE_SETTINGS_MUTATION
+} from '../../../lib/graphql'
 
 import classes from './Options.module.css'
 
@@ -20,10 +24,11 @@ const Options = ({ history }) => {
 
     if (data) {
       const {
-        me: {
-          settings: { renderDistance: rd }
-        }
+        me: { settings }
       } = data
+
+      const { renderDistance: rd = 2 } = settings || {}
+
       setRenderDistance(rd)
     }
   }, [data])
@@ -59,11 +64,24 @@ const Options = ({ history }) => {
         className={sharedStyles.button}
         onClick={() => {
           const settings = { renderDistance: Math.round(renderDistance) }
+
+          let mutation
+
+          const { id: settingsId } = data.me.settings || {}
+
+          if (settingsId) {
+            mutation = UPDATE_SETTINGS_MUTATION
+            Object.assign(settings, {
+              id: settingsId
+            })
+          } else {
+            mutation = CREATE_SETTINGS_MUTATION
+          }
+
           client
             .mutate({
-              mutation: UPDATE_SETTINGS_MUTATION,
+              mutation,
               variables: {
-                id: data.me.settings.id,
                 ...settings
               }
             })

@@ -1,11 +1,14 @@
-import Config from '../../config/config'
+// import Config from '../../config/config'
 
 import socketIOClient from 'socket.io-client'
 
-const SOCKET_ENDPOINT = Config.tech.socketEndpoint
+// const SOCKET_ENDPOINT = Config.tech.socketEndpoint
 
 function IOClient() {
-  const socket = socketIOClient(SOCKET_ENDPOINT)
+  // const socket = socketIOClient(SOCKET_ENDPOINT)
+  const socket = socketIOClient({
+    path: '/ws.js/socket.io/'
+  })
 
   this.getSocket = () => socket
 }

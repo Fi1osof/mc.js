@@ -6,3 +6,4 @@ build/
 .env
 server/src/generated
 yarn-error.log
+yarn.lock
