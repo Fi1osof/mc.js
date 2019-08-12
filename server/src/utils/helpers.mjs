@@ -47,7 +47,7 @@ class Helpers {
 
     const {
       id: currentUserId,
-    } = currentUser;
+    } = currentUser || {};
 
     if (!currentUserId && requireAuth) {
       throw new Error('Authentication required');

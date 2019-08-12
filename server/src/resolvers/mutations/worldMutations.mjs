@@ -98,7 +98,7 @@ const WorldMutations = {
         id
       }
     }
- 
+
 
     return db.mutation.updateWorld(
       {
@@ -112,16 +112,20 @@ const WorldMutations = {
     await db.mutation.deleteWorld({ where: { id: args.worldId } })
     return true
   },
-  async runCommand(
-    parent,
-    {
-      data: { playerId, worldId, command }
-    },
-    { db }
-  ) {
+  async runCommand(parent, args, ctx, info) {
     let type = 'ERROR'
     let sender = ''
-    let body = DEFAULT_MESSAGE
+    let body = DEFAULT_MESSAGE;
+
+    const {
+      data: {
+        playerId,
+        worldId,
+        command,
+      }
+    } = args;
+
+    const { db } = ctx;
 
     const {
       user: { username }

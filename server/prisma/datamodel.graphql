@@ -29,13 +29,14 @@ type Player {
   z: Float!
   dirx: Float!
   diry: Float!
-  inventory: Inventory!
+  inventory: Inventory
     @relation(link: INLINE, name: "InventoryToPlayer", onDelete: CASCADE)
 }
 
 type Settings {
   id: ID! @unique
   renderDistance: Int! @default(value: 2)
+  User: User!
 }
 
 type World {
