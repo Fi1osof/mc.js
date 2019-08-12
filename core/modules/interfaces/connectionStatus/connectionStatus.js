@@ -3,9 +3,33 @@ import Helpers from '../../../utils/helpers'
 import classes from './connectionStatus.module.css'
 
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import URI from 'urijs'
 
 function ConnectionStatus(container) {
-  const subscriptionClient = new SubscriptionClient(`ws://localhost:4000`, {
+  const {
+    location: { origin }
+  } = global
+
+  const endpoint = `${origin}/api/`
+
+  const wsUri = new URI(endpoint)
+
+  let schema = wsUri.scheme()
+
+  switch (schema) {
+    case 'http':
+      schema = 'ws'
+      break
+
+    case 'https':
+    default:
+      schema = 'wss'
+      break
+  }
+
+  wsUri.scheme(schema)
+
+  const subscriptionClient = new SubscriptionClient(wsUri.toString(), {
     reconnect: true
   })
 
