@@ -106,9 +106,8 @@ const WorldMutations = {
       info
     )
   },
-  async deleteWorld(parent, args, { db }) {
-    await db.mutation.deleteWorld({ where: { id: args.worldId } })
-    return true
+  async deleteWorld(parent, args, { prisma }) {
+    return prisma.mutation.deleteWorld(args)
   },
   async runCommand(parent, args, ctx, info) {
     let type = 'ERROR'
