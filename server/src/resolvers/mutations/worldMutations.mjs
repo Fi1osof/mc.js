@@ -106,8 +106,8 @@ const WorldMutations = {
       info
     )
   },
-  async deleteWorld(parent, args, { prisma }) {
-    return prisma.mutation.deleteWorld(args)
+  async deleteWorld(parent, args, { db }) {
+    return db.mutation.deleteWorld(args)
   },
   async runCommand(parent, args, ctx, info) {
     let type = 'ERROR'

@@ -67,7 +67,7 @@ type Block {
 # cursor is what the player is holding (1 - 9)
 type Inventory {
   id: ID! @unique
-  player: Player! @relation(name: "InventoryToPlayer", onDelete: CASCADE)
+  player: Player @relation(name: "InventoryToPlayer", onDelete: SET_NULL)
   cursor: Int!
   data: String!
 }
