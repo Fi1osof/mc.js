@@ -4,10 +4,8 @@ import { createServer } from 'http'
 import debug from 'debug'
 import socketIO from 'socket.io'
 
-export default (prisma) => {
-
+export default prisma => {
   // console.log("prisma", prisma);
-
 
   const app = createServer()
   const io = socketIO(app)
@@ -20,12 +18,11 @@ export default (prisma) => {
     log('Socket server running on port 5000.')
   })
 
-  io.on('connection', function (socket) {
+  io.on('connection', function(socket) {
     log('user connected.')
 
-    socket.on('setInfo', async function ({ worldId, username }) {
-
-      console.log("socket setInfo", worldId, username);
+    socket.on('setInfo', async function({ worldId, username }) {
+      console.log('socket setInfo', worldId, username)
 
       watchers[socket.id] = username
 
@@ -46,12 +43,12 @@ export default (prisma) => {
       log(`set info for '${username}' on world '${worldId}'`)
     })
 
-    socket.on('position', function (data) {
+    socket.on('position', function(data) {
       data.username = watchers[socket.id]
       socket.broadcast.emit('players', data)
     })
 
-    socket.on('removeInfo', async function ({ worldId, username }) {
+    socket.on('removeInfo', async function({ worldId, username }) {
       delete watchers[socket.id]
 
       // CREATE LEAVE WORLD MESSAGE
@@ -71,12 +68,10 @@ export default (prisma) => {
       log(`removed info for '${username}' on world '${worldId}'`)
     })
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function() {
       log('user disconnected.')
     })
   })
 
-
   return io
-
 }

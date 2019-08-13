@@ -5,10 +5,9 @@ const DEFAULT_MESSAGE = 'Unknown command. Try /help for a list of commands.'
 
 const WorldMutations = {
   async createWorld(parent, args, ctx, info) {
+    const { db, request } = ctx
 
-    const { db, request } = ctx;
-
-    const id = Helpers.getUserId(null, true, ctx);
+    const id = Helpers.getUserId(null, true, ctx)
 
     const {
       data: { gamemode, name, seed, type }
@@ -99,7 +98,6 @@ const WorldMutations = {
       }
     }
 
-
     return db.mutation.updateWorld(
       {
         where,
@@ -115,17 +113,13 @@ const WorldMutations = {
   async runCommand(parent, args, ctx, info) {
     let type = 'ERROR'
     let sender = ''
-    let body = DEFAULT_MESSAGE;
+    let body = DEFAULT_MESSAGE
 
     const {
-      data: {
-        playerId,
-        worldId,
-        command,
-      }
-    } = args;
+      data: { playerId, worldId, command }
+    } = args
 
-    const { db } = ctx;
+    const { db } = ctx
 
     const {
       user: { username }

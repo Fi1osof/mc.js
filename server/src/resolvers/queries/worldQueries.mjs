@@ -6,18 +6,14 @@ const WorldQueries = {
     return db.query.user({ where: { id: userId } }, info)
   },
   async world(parent, args, { db }, info) {
-
-    let {
-      data,
-      where,
-    } = args;
+    let { data, where } = args
 
     await db.mutation.updateWorld({
       data: {
         ...data,
         lastPlayed: new Date().toISOString()
       },
-      where,
+      where
     })
     return db.query.world({ where }, info)
   }

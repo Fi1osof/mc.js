@@ -2,14 +2,11 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 class Helpers {
-
   constructor() {
-
-    this.hashPassword = this.hashPassword.bind(this);
-    this.getUserId = this.getUserId.bind(this);
-    this.getBlockRep = this.getBlockRep.bind(this);
-    this.generateToken = this.generateToken.bind(this);
-
+    this.hashPassword = this.hashPassword.bind(this)
+    this.getUserId = this.getUserId.bind(this)
+    this.getBlockRep = this.getBlockRep.bind(this)
+    this.generateToken = this.generateToken.bind(this)
   }
 
   static hashPassword(password) {
@@ -21,9 +18,8 @@ class Helpers {
   }
 
   static getUserId(request, requireAuth = true, ctx) {
-
     if (!ctx) {
-      throw new Error("ctx required");
+      throw new Error('ctx required')
     }
 
     // const header = request.request
@@ -40,20 +36,15 @@ class Helpers {
     //   throw new Error('Authentication required')
     // }
 
+    const { currentUser } = ctx
 
-    const {
-      currentUser,
-    } = ctx;
-
-    const {
-      id: currentUserId,
-    } = currentUser || {};
+    const { id: currentUserId } = currentUser || {}
 
     if (!currentUserId && requireAuth) {
-      throw new Error('Authentication required');
+      throw new Error('Authentication required')
     }
 
-    return currentUserId;
+    return currentUserId
   }
 
   static getBlockRep(worldId, x, y, z) {

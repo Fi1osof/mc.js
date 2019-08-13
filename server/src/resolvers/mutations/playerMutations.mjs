@@ -8,8 +8,7 @@ const PlayerMutations = {
     },
     ctx
   ) {
-
-    const { db, request } = ctx;
+    const { db, request } = ctx
 
     const id = Helpers.getUserId(request, true, ctx)
 
@@ -24,18 +23,16 @@ const PlayerMutations = {
         },
         world: {
           id: worldId
-        },
-      },
+        }
+      }
     })
 
-    let player;
+    let player
 
     // Player creation
     if (players && players[0]) {
-      player = players[0];
-    }
-    else {
-
+      player = players[0]
+    } else {
       player = await db.mutation.createPlayer({
         data: {
           isAdmin: true,
@@ -66,7 +63,7 @@ const PlayerMutations = {
       })
     }
 
-    return player;
+    return player
   },
   async updatePlayer(parent, args, { db }, info) {
     let { where } = args
@@ -102,7 +99,7 @@ const PlayerMutations = {
       },
       info
     )
-  },
+  }
 }
 
 export default PlayerMutations

@@ -74,16 +74,11 @@ const UserMutations = {
     )
   },
   async createSettings(source, args, ctx, info) {
-
-    const {
-      db,
-    } = ctx;
+    const { db } = ctx
 
     const userId = Helpers.getUserId(null, true, ctx)
 
-    const {
-      data,
-    } = args;
+    const { data } = args
 
     return db.mutation.createSettings(
       {
@@ -91,13 +86,13 @@ const UserMutations = {
           ...data,
           User: {
             connect: {
-              id: userId,
-            },
-          },
+              id: userId
+            }
+          }
         },
         where: {
-          id: userId,
-        },
+          id: userId
+        }
       },
       info
     )
@@ -118,7 +113,7 @@ const UserMutations = {
       },
       info
     )
-  },
+  }
 }
 
 export default UserMutations

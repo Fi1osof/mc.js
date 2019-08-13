@@ -13,9 +13,8 @@ import { createHttpLink } from 'apollo-link-http'
 import { getMainDefinition } from 'apollo-utilities'
 import { setContext } from 'apollo-link-context'
 import { split } from 'apollo-link'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import URI from 'urijs'
+import { ApolloProvider } from '@apollo/react-hooks'
 
 dotenv.config()
 
@@ -87,11 +86,9 @@ const apolloClient = new ApolloClient({
 
 const main = (
   <ApolloProvider client={apolloClient}>
-    <ApolloHooksProvider client={apolloClient}>
-      <BrowserRouter>
-        <Main />
-      </BrowserRouter>
-    </ApolloHooksProvider>
+    <BrowserRouter>
+      <Main />
+    </BrowserRouter>
   </ApolloProvider>
 )
 
